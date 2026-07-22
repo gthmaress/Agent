@@ -1,8 +1,7 @@
 from uuid import uuid4
-from typing import Annotated
 
 from dotenv import load_dotenv
-from typing_extensions import TypedDict
+from pathlib import Path
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_groq import ChatGroq
@@ -10,22 +9,17 @@ from langchain_groq import ChatGroq
 from langgraph.graph import StateGraph
 from langgraph.graph import START
 from langgraph.graph import END
-from langgraph.graph.message import add_messages
 
 from langgraph.prebuilt import ToolNode
 from langgraph.prebuilt import tools_condition
 
 from langgraph.checkpoint.memory import MemorySaver
 
+BASE_DIR = Path(__file__).parent
+load_dotenv(BASE_DIR / "others" / ".env")
+
 from tools import search
-
-load_dotenv()
-
-# State
-
-class State(TypedDict):
-
-    messages: Annotated[list, add_messages]
+from state import User_profile, State
 
 # LLM
 
@@ -113,7 +107,7 @@ class Assistant:
 
     def chat(self):
 
-        print("Введите 'exit' для выхода.")
+        print("\nВведите 'exit' для выхода.")
         print("Введите '/reset' для новой истории.\n")
 
         while True:
