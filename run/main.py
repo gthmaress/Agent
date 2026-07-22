@@ -1,7 +1,6 @@
 from uuid import uuid4
 
 from dotenv import load_dotenv
-from pathlib import Path
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_groq import ChatGroq
@@ -15,8 +14,7 @@ from langgraph.prebuilt import tools_condition
 
 from langgraph.checkpoint.memory import MemorySaver
 
-BASE_DIR = Path(__file__).parent
-load_dotenv(BASE_DIR / "others" / ".env")
+load_dotenv()
 
 from tools import search
 from state import User_profile, State
