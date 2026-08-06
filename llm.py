@@ -1,6 +1,7 @@
 from deepagents import create_deep_agent
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
+from langgraph.checkpoint.memory import MemorySaver
 
 load_dotenv()
 
@@ -10,6 +11,8 @@ llm = ChatGroq(
     model="openai/gpt-oss-20b"
 )
 
+checkpointer = MemorySaver()
+
 agent = create_deep_agent(
 
     model = llm, 
@@ -18,18 +21,5 @@ agent = create_deep_agent(
         search
     ],
 
-    system_prompt = """
-
-    Ты исполнитель.
-
-Тебе приходит задача от Planner.
-
-Выполни только эту задачу.
-
-Если нужна информация -
-используй инструменты.
-
-Не создавай новый план.
-
-"""
+    checkpointer = checkpointer
 )   
