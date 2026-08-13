@@ -1,4 +1,4 @@
 # DeepAgent 
 
-> Ai-agent.
+> Проект по написанию ИИ-агента на основе DeepAgent.
 
