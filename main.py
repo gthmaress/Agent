@@ -1,85 +1,55 @@
 from llm import agent
-from agents.planner import planner
 from uuid import uuid4
 
 class Assistant:
 
     def __init__(self):
-
         self.agent = agent
         self.thread_id = str(uuid4())
 
-    def run_agent(self, user_input):
+    def run_agent(self, user_input: str) -> str:
 
-        plan = planner(user_input)
-
-        print(f"PLAN: \n{plan}")
-        
-        task = plan.tasks[0]
-
-        executor_prompt = f"""
-
-            Ты - исполнитель. 
-
-            Тебе назначена задача.
-
-            Тип агента:
-            {task.agent}
-
-
-            Задача:
-            {task.description}
-
-            Выполни её.
-
-        """
-        
         result = self.agent.invoke(
             {
-               "messages": [
-                   {
-                       "role": "user",
-                       "content": executor_prompt
-                   }, 
-               ]    
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": user_input
+                    }
+                ]
             },
-            
-            config = {
+            config={
                 "configurable": {
                     "thread_id": self.thread_id
                 }
             }
         )
 
-        return result
-
+        return result["messages"][-1].content
 
     def chat(self):
 
         while True:
 
-            user_message = input("\nTы: ")
+            user_message = input("\nТы: ").strip()
 
-            if user_message == "exit":
-                        
+            if user_message.lower() == "exit":
                 print("\nSystem: Сессия окончена!\n")
-                        
                 break
 
-            if user_message == "/reset":
-
+            if user_message.lower() == "reset":
                 self.thread_id = str(uuid4())
-                        
                 print("\nSystem: История очищена!\n")
-                        
                 continue
 
-            answer = self.run_agent(user_message)
+            try:
+                answer = self.run_agent(user_message)
+                print(f"\nAI: {answer}")
 
-            print(f"AI: {answer["messages"][-1].content}")
-            
+            except Exception as e:
+                print(f"\nERROR: {e}")
+
+
 if __name__ == "__main__":
-    
     assistant = Assistant()
     assistant.chat()
-

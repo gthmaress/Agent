@@ -1,11 +1,13 @@
 from deepagents import create_deep_agent
 from langchain_groq import ChatGroq
-from dotenv import load_dotenv
 from langgraph.checkpoint.memory import MemorySaver
+from dotenv import load_dotenv
 
 load_dotenv()
 
 from tools import search
+from prompts import SYSTEM_PROMPT
+
 
 llm = ChatGroq(
     model="openai/gpt-oss-20b"
@@ -14,12 +16,10 @@ llm = ChatGroq(
 checkpointer = MemorySaver()
 
 agent = create_deep_agent(
-
-    model = llm, 
-
-    tools = [
+    model=llm,
+    tools=[
         search
     ],
-
-    checkpointer = checkpointer
-)   
+    system_prompt=SYSTEM_PROMPT,
+    checkpointer=checkpointer,
+)
