@@ -1,4 +1,4 @@
-from llm import agent
+from agent import agent
 from uuid import uuid4
 
 class Assistant:
@@ -7,6 +7,7 @@ class Assistant:
         self.agent = agent
         self.thread_id = str(uuid4())
 
+    #Результат работы агента
     def run_agent(self, user_input: str) -> str:
 
         result = self.agent.invoke(
@@ -18,6 +19,7 @@ class Assistant:
                     }
                 ]
             },
+            #Сохранение истории диалога
             config={
                 "configurable": {
                     "thread_id": self.thread_id
@@ -27,6 +29,7 @@ class Assistant:
 
         return result["messages"][-1].content
 
+    #Чат в терминале проекта 
     def chat(self):
 
         while True:
@@ -42,14 +45,10 @@ class Assistant:
                 print("\nSystem: История очищена!\n")
                 continue
 
-            try:
-                answer = self.run_agent(user_message)
-                print(f"\nAI: {answer}")
-
-            except Exception as e:
-                print(f"\nERROR: {e}")
+            answer = self.run_agent(user_message)
+            print(f"\nAI: {answer}")
 
 
-if __name__ == "__main__":
-    assistant = Assistant()
-    assistant.chat()
+
+assistant = Assistant()
+assistant.chat()
