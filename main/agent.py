@@ -1,16 +1,15 @@
 from deepagents import create_deep_agent
 from langchain_groq import ChatGroq
 from langgraph.checkpoint.memory import MemorySaver
-from dotenv import load_dotenv
 
-load_dotenv()
-
+from config import settings
 from tools import search
 from prompts import SYSTEM_PROMPT
 
 
 llm = ChatGroq(
-    model="openai/gpt-oss-20b"
+    model=settings.model_name,
+    api_key=settings.groq_api_key,
 )
 
 checkpointer = MemorySaver()
